@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import './WeatherApp.css';
 import useFetch from '../customHooks/useFetch';
+import WeatherInput from './WeatherInput';
+import WeatherDisplay from './WeatherDisplay';
 
 export default function WeatherApp() {
-
     const [city, setCity] = useState('');
     const [inputValue, setInputValue] = useState('');
     const { data: weather, error, loading, refetch } = useFetch({ url: 'https://api.weatherapi.com/v1/current.json', city });
@@ -20,32 +21,8 @@ export default function WeatherApp() {
 
     return (
         <div className='weather-app-main-container'>
-            <form onSubmit={submit}>
-                <input
-                    type='text'
-                    placeholder='Enter City/Country Name'
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                />
-                <button type='submit'>Submit</button>
-            </form>
-            <div className='heading'>Weather Details:</div>
-            {loading ? (
-                <div>Loading...</div>
-            ) : error ? (
-                <div>Error: {error}</div>
-            ) : (
-                <ul>
-                    {weather && (
-                        <>
-                            <li>Last Updated: {weather.last_updated}</li>
-                            <li>Humidity: {weather.humidity}</li>
-                            <li>Wind Speed (kph): {weather.wind_kph}</li>
-                            <li>Heat Index (C): {weather.heatindex_c}</li>
-                        </>
-                    )}
-                </ul>
-            )}
+            <WeatherInput inputValue={inputValue} setInputValue={setInputValue} submit={submit} />
+            <WeatherDisplay weather={weather} loading={loading} error={error} />
         </div>
     );
 }
